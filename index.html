@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+    <head></head>
+    <body>
+        <h1>
+            Word Changer
+        </h1>
+        <p>
+            We like to change words into others. Put in some words. Any words. No words at all! We will play with them and make them different and silly.
+        </p>
+        <textarea id="inputText"></textarea><br/>
+
+        <p>How many words should we change?</p>
+        <select id="howManyChance">
+            <option value="1">100%</option>
+            <option value="0.9">90%</option>
+            <option value="0.8">80%</option>
+            <option value="0.7">70%</option>
+            <option value="0.6">60%</option>
+            <option value="0.5">50%</option>
+            <option value="0.4">40%</option>
+            <option value="0.3">30%</option>
+            <option value="0.2">20%</option>
+            <option value="0.1">10%</option>
+        </select><br/><br/>
+
+        
+        <input type="checkbox" id="changeNames" checked ><label>Change people's names too?</label><br/><br/>
+
+
+        <button id="changeGo">Change Words</button><br/>
+
+        <div id="outputText">
+
+        </div>
+
+        <script src="names.js"></script>
+        <script src="adjectives.js"></script>
+        <script src="nouns.js"></script>
+        <script src="verbs.js"></script>
+        <script src="randy.js"></script>
+        <script src="index.js"></script>
+    </body>
+</html>
