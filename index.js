@@ -15,8 +15,18 @@ function changeWords(){
     
         storyArray = story.split(" ");
         for (let i = 0; i < storyArray.length; i++) {
-            const word = storyArray[i];
+            var word = storyArray[i];
+            var punctuation = '';
+            var replaced = false; // did we replace this word?
+
             // get the word without any punctuation or anything
+            var lastCharInWord = word[ word.length-1 ]
+            if (lastCharInWord == '.' || lastCharInWord == "," || word[ word.length-1 ] == "!" || lastCharInWord == '?'){
+                punctuation = word.substr(word.length-1, word.length);
+            }
+
+
+
             var wordWithoutPunctuation = /[a-z]+/i.exec(word)[0];
             var lowercased = wordWithoutPunctuation.toLowerCase();
 
@@ -26,6 +36,7 @@ function changeWords(){
                     const name = names[j];
                     if ( lowercased == name.toLowerCase() ){
                         storyArray[i] = "<span style='color: green'>"+randy("name")+"</span>";
+                        replaced = true;
                     }
                 }    
             }
@@ -43,16 +54,53 @@ function changeWords(){
 
                         // if it does, we can switch it with another random word from the same list
                         storyArray[i] = "<span style='color: red'>"+randy(wordlist)+"</span>";
-
+                        replaced = true;
                     }
 
                 }
             }
+
+            // add back any punctuation
+            if (replaced){
+                storyArray[i] += punctuation;
+            }
         }
+        var changedStory = storyArray.join(" ")
 
         outputText.innerHTML = "<p>"+story +
         "</p>#############################################################<p>"
-        +storyArray.join(" ")+"</p>";
+        +changedStory+"</p>";
+
+        if ('speechSynthesis' in window) {
+            
+            outputText.innerHTML +=
+            "Rate: <input id='rate' value='1'/> from 0.1 to 10<br/>  "+
+            "Pitch: <input id='pitch' value='2'/> from 0 to 2<br/>  "+
+            "Volume : <input id='volume' value='1'/> from 0 to 1<br/>  "+
+            "<button id='speak'>Speak the story, robot!</button>";
+            var msg = new SpeechSynthesisUtterance();
+        
+            var changedStoryJustWords = changedStory.replace(/<[^>]*>?/gm, '');
+            msg.text = changedStoryJustWords;
+            msg.lang = 'en';
+            document.getElementById('speak').addEventListener('click', function(){
+                msg.volume = document.getElementById('volume').value || 1; // From 0 to 1
+                msg.rate = document.getElementById('rate').value || 1; // From 0.1 to 10
+                msg.pitch = document.getElementById('pitch').value || 2; // From 0 to 2
+                speechSynthesis.speak(msg);
+            })
+
+           }else{
+            outputText.innerHTML += "<span style='color: grey'>Sorry, your browser doesn't support the speech synthesis API !</span>"
+           }
+
+
+        
+
+        
+        
+
+
     }
     catch (error){
         outputText.innerHTML = "Sorry, I don't like the text you gave us. Try some other text. <p style='color: red'>"+error+"</p>";
@@ -62,6 +110,10 @@ function changeWords(){
 }
 
 document.getElementById("changeGo").addEventListener('click', changeWords)
+
+
+
+
 
 
 
